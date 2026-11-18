@@ -2,34 +2,36 @@ import SwiftUI
 
 @main
 struct AssistantVocalApp: App {
+    @State private var controller = AssistantController(settings: AppSettings(), metrics: MetricsRecorder())
+
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environment(controller)
+                .environment(controller.metrics)
         }
     }
 }
 
 struct RootView: View {
+    @Environment(AssistantController.self) private var controller
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
         TabView {
             Tab("Assistant", systemImage: "waveform") {
-                AssistantPlaceholderView()
+                AssistantView()
+            }
+            Tab("Réglages", systemImage: "slider.horizontal.3") {
+                SettingsView()
             }
             Tab("Diagnostic", systemImage: "stethoscope") {
                 DiagnosticView()
             }
         }
-    }
-}
-
-/// Phase 1a, étape 1 : seul l'écran Diagnostic est livré.
-/// Le chat vocal arrive une fois la disponibilité du modèle Apple confirmée sur l'iPhone.
-struct AssistantPlaceholderView: View {
-    var body: some View {
-        ContentUnavailableView(
-            "Bientôt",
-            systemImage: "mic.badge.plus",
-            description: Text("Ouvre l'onglet Diagnostic, lance les tests, puis exporte le rapport.")
-        )
+        .task { controller.prepare() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .background { controller.cancelAll() }
+        }
     }
 }

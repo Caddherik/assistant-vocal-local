@@ -10,8 +10,8 @@ Un assistant vocal personnel qui tourne **entièrement sur l'iPhone** : reconnai
 
 | Étape | Contenu | État |
 |---|---|---|
-| 1a-1 | Écran Diagnostic : appareil, mémoire, chaleur, modèle Apple, langues, voix, tests chronométrés | en cours |
-| 1a-2 | Appui long → transcription → réponse en streaming → voix | à venir |
+| 1a-1 | Écran Diagnostic : appareil, mémoire, chaleur, modèle Apple, langues, voix, tests chronométrés | fait, validé sur iPhone |
+| 1a-2 | Appui long → transcription → réponse en streaming → voix, réglages, latences mesurées | en cours |
 | 1b | Mains libres, coupure de la voix quand on reparle, second modèle (MLX) | à venir |
 
 ## Compiler

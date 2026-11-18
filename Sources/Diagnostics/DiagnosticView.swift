@@ -6,6 +6,7 @@ struct DiagnosticView: View {
     @State private var modelProbe = ModelProbe()
     @State private var voiceProbe = VoiceProbe()
     @State private var copied = false
+    @Environment(MetricsRecorder.self) private var metrics
 
     var body: some View {
         NavigationStack {
@@ -37,6 +38,21 @@ struct DiagnosticView: View {
                     } label: {
                         Label("Autoriser micro et reconnaissance vocale", systemImage: "mic")
                     }
+                }
+
+                Section {
+                    ForEach(metrics.summary, id: \.label) { line in
+                        LabeledContent(line.label, value: line.value).font(.callout)
+                    }
+                    ForEach(metrics.exchanges.suffix(10).reversed()) { exchange in
+                        Text(MetricsRecorder.describe(exchange))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } header: {
+                    Text("Échanges mesurés")
+                } footer: {
+                    Text("Médianes depuis l'ouverture de l'app. Le chrono part quand tu relâches le bouton.")
                 }
 
                 ForEach(sections) { section in
