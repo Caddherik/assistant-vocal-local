@@ -26,6 +26,20 @@ struct SettingsView: View {
                     Text("Une voix « Enhanced » ou « Premium » sonne bien mieux : Réglages › Accessibilité › Contenu énoncé › Voix.")
                 }
 
+                Section {
+                    Picker("Longueur", selection: $settings.responseLength) {
+                        ForEach(AppSettings.ResponseLength.allCases) { length in
+                            Text(length.label).tag(length)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: settings.responseLength) { controller.newConversation() }
+                } header: {
+                    Text("Longueur des réponses")
+                } footer: {
+                    Text("Changer la longueur démarre une nouvelle conversation.")
+                }
+
                 Section("Modèle") {
                     LabeledContent("Modèle", value: "Apple, sur l'iPhone")
                     LabeledContent("Second modèle (MLX)", value: "Phase 1b")

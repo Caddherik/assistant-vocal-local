@@ -30,7 +30,7 @@ final class AssistantController {
         self.settings = settings
         self.metrics = metrics
         recognizer = AppleSpeechRecognizer()
-        engine = FoundationChatEngine(instructions: settings.instructions)
+        engine = FoundationChatEngine(instructions: settings.effectiveInstructions)
         voice = AppleSpeechSynthesizer()
 
         voice.onFirstAudio = { [weak self] in self?.pending?.firstAudio = .now }
@@ -141,7 +141,7 @@ final class AssistantController {
                 return
             } catch {
                 let (message, mustReset) = FoundationChatEngine.message(for: error)
-                if mustReset { engine.reset(instructions: settings.instructions) }
+                if mustReset { engine.reset(instructions: settings.effectiveInstructions) }
                 fail(message)
             }
         }
@@ -199,7 +199,7 @@ final class AssistantController {
         cancelAll()
         messages = []
         liveTranscript = ""
-        engine.reset(instructions: settings.instructions)
+        engine.reset(instructions: settings.effectiveInstructions)
     }
 
     private func fail(_ message: String) {
