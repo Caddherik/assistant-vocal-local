@@ -55,7 +55,7 @@ final class FoundationChatEngine: ChatEngine {
         case .exceededContextWindowSize:
             return ("La conversation est trop longue pour le modèle : je repars d'une page blanche.", true)
         case .guardrailViolation:
-            return ("Le filtre de sécurité d'Apple a bloqué cette réponse.", false)
+            return ("Le filtre de sécurité d'Apple a bloqué cette réponse. Il refuse certains sujets, comme les stupéfiants, et je ne peux pas le désactiver.", false)
         case .unsupportedLanguageOrLocale:
             return ("Le modèle ne prend pas en charge cette langue.", false)
         case .assetsUnavailable:

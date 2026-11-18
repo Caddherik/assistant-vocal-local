@@ -54,7 +54,9 @@ final class AssistantController {
             return
         case .thinking, .speaking:
             interruptResponse()   // barge-in : on coupe et on écoute
-        case .idle, .error:
+        case .error:
+            voice.stop()          // on coupe le message d'erreur s'il est en cours
+        case .idle:
             break
         }
         startListening()
@@ -159,6 +161,10 @@ final class AssistantController {
     }
 
     private func endExchange() {
+        if case .error = state {
+            audio.deactivate()   // fin du message d'erreur dit à voix haute
+            return
+        }
         guard state.isResponding else { return }
         if let pending { metrics.record(pending.finish()) }
         pending = nil
@@ -206,7 +212,11 @@ final class AssistantController {
         voice.stop()
         pending = nil
         state = .error(message)
-        audio.deactivate()
+        // L'erreur est aussi dite à voix haute : sans regarder l'écran, un silence
+        // passerait pour un plantage. La session audio est rendue à la fin du message.
+        voice.beginTurn()
+        voice.enqueue(message, voice: settings.resolvedVoice, rate: settings.speechRate)
+        voice.finishTurn()
     }
 }
 
