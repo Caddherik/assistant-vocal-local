@@ -129,8 +129,6 @@ final class AppleSpeechRecognizer: SpeechRecognizing {
         format: AVAudioFormat,
         builder: AsyncStream<AnalyzerInput>.Continuation
     ) -> AVAudioNodeTapBlock {
-
-
         return { buffer, _ in
             nonisolated(unsafe) let source = buffer
             let ratio = format.sampleRate / source.format.sampleRate

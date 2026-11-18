@@ -6,6 +6,7 @@ struct DiagnosticView: View {
     @State private var modelProbe = ModelProbe()
     @State private var voiceProbe = VoiceProbe()
     @State private var copied = false
+    @State private var shareItems: [Any]?
     @Environment(MetricsRecorder.self) private var metrics
 
     var body: some View {
@@ -83,13 +84,25 @@ struct DiagnosticView: View {
                         UIPasteboard.general.string = report
                         copied = true
                     }
-                    ShareLink(item: report) {
-                        Label("Exporter", systemImage: "square.and.arrow.up")
+                    Button("Exporter", systemImage: "square.and.arrow.up") {
+                        shareItems = Self.shareItems(for: report)
                     }
                 }
             }
             .task { await reload() }
+            .sheet(isPresented: Binding(get: { shareItems != nil }, set: { if !$0 { shareItems = nil } })) {
+                ActivityView(items: shareItems ?? [])
+                    .presentationDetents([.medium, .large])
+            }
         }
+    }
+
+    /// Le rapport est construit AU MOMENT du tap (pas à l'affichage de l'écran), et partagé
+    /// à la fois en texte (corps du mail) et en fichier .txt (pièce jointe).
+    private static func shareItems(for report: String) -> [Any] {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("Diagnostic-assistant.txt")
+        guard (try? report.write(to: url, atomically: true, encoding: .utf8)) != nil else { return [report] }
+        return [report, url]
     }
 
     private func reload() async {
@@ -113,4 +126,15 @@ struct DiagnosticView: View {
         text += "Voix : \(voiceProbe.result)\n"
         return text
     }
+}
+
+/// La feuille de partage d'iOS (Mail, Notes, Messages…).
+private struct ActivityView: UIViewControllerRepresentable {
+    let items: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }
