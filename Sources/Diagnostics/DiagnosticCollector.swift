@@ -230,7 +230,7 @@ enum DiagnosticCollector {
         String(format: "%.2f Go", Double(bytes) / 1_073_741_824)
     }
 
-    static func thermalLabel(_ state: ProcessInfo.ThermalState) -> String {
+    nonisolated static func thermalLabel(_ state: ProcessInfo.ThermalState) -> String {
         switch state {
         case .nominal: "normal"
         case .fair: "tiède"

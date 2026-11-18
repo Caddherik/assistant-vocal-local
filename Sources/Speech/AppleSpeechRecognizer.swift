@@ -111,7 +111,7 @@ final class AppleSpeechRecognizer: SpeechRecognizing {
         inputBuilder = nil
         resultsTask?.cancel()
         resultsTask = nil
-        try? await analyzer?.cancelAndFinishNow()
+        await analyzer?.cancelAndFinishNow()
         analyzer = nil
     }
 
@@ -129,8 +129,8 @@ final class AppleSpeechRecognizer: SpeechRecognizing {
         format: AVAudioFormat,
         builder: AsyncStream<AnalyzerInput>.Continuation
     ) -> AVAudioNodeTapBlock {
-        nonisolated(unsafe) let converter = converter
-        nonisolated(unsafe) let format = format
+
+
         return { buffer, _ in
             nonisolated(unsafe) let source = buffer
             let ratio = format.sampleRate / source.format.sampleRate
