@@ -1,0 +1,39 @@
+name: AssistantVocal
+options:
+  bundleIdPrefix: com.caddherik
+  deploymentTarget:
+    iOS: "27.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  AssistantVocal:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    info:
+      path: Config/Info.plist
+      properties:
+        CFBundleDisplayName: Assistant
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        ITSAppUsesNonExemptEncryption: false
+        NSMicrophoneUsageDescription: "Le micro sert à t'écouter quand tu maintiens le bouton. Le son ne quitte jamais l'iPhone."
+        NSSpeechRecognitionUsageDescription: "La reconnaissance vocale transforme ta voix en texte, sur l'iPhone, sans connexion."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.caddherik.assistantvocal
+        PRODUCT_NAME: AssistantVocal
+        GENERATE_INFOPLIST_FILE: NO
+    scheme: {}

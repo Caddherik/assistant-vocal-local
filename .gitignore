@@ -1,0 +1,13 @@
+# Généré par XcodeGen
+*.xcodeproj/
+Config/Info.plist
+
+# Sorties de build
+build/
+DerivedData/
+Payload/
+*.ipa
+
+# Système
+.DS_Store
+xcuserdata/
